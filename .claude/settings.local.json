@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude plugin:*)",
+      "Bash(claude plugins:*)",
+      "Bash(CLAUDE_CODE_GIT_BASH_PATH=\"C:\\\\app\\\\Git\\\\bin\\\\bash.exe\" claude plugins marketplace list 2>&1)",
+      "Bash(CLAUDE_CODE_GIT_BASH_PATH=\"C:\\\\app\\\\Git\\\\bin\\\\bash.exe\" claude plugins list 2>&1)",
+      "Bash(CLAUDE_CODE_GIT_BASH_PATH=\"C:\\\\app\\\\Git\\\\bin\\\\bash.exe\" claude plugin search figma)",
+      "Bash(gh api:*)",
+      "Bash(curl -s \"https://api.github.com/repos/anthropics/claude-plugins-official/contents/plugins\")",
+      "Skill(update-config)",
+      "Bash(curl -s \"https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/\")",
+      "Bash(sed 's/<[^>]*>//g')",
+      "Bash(curl -sL \"https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/\")",
+      "Bash(CLAUDE_CODE_GIT_BASH_PATH=\"C:\\\\app\\\\Git\\\\bin\\\\bash.exe\" claude mcp add --transport http figma https://mcp.figma.com/mcp 2>&1)",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_screenshot",
+      "mcp__figma__whoami",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)"
+    ]
+  }
+}
