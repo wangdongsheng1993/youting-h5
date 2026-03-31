@@ -6,44 +6,10 @@
     </div>
     <div v-else-if="detail" class="screen">
       <div class="status-bar">
-        <!-- <span class="status-time">9:41</span>
-        <div class="status-icons">
-          <div class="signal-bars">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <svg viewBox="0 0 24 24" class="status-icon wifi-icon" aria-hidden="true">
-            <path
-              d="M3 9.5C8.6 5.1 15.4 5.1 21 9.5M6 13c3.9-3 8.1-3 12 0M9.3 16.3c1.8-1.4 3.6-1.4 5.4 0M12 19h.01"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <div class="battery">
-            <div class="battery-cap"></div>
-            <div class="battery-core"></div>
-          </div>
-        </div> -->
+
       </div>
 
       <header class="top-bar">
-        <!-- <button class="circle-btn icon-only" type="button">
-          <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-            <path
-              d="M15 5 8 12l7 7"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button> -->
 
         <div class="author-pill">
           <img v-if="avatarSource" :src="avatarSource" alt="avatar" class="author-avatar" />
@@ -53,35 +19,21 @@
 
         <div class="top-bar-actions">
           <div class="vip-chip">
-            <svg viewBox="0 0 24 24" class="chip-icon" aria-hidden="true">
-              <path
-                d="M12 3 4 8l3.2 10h9.6L20 8l-8-5Z"
-                fill="currentColor"
-              />
-            </svg>
+            <img :src="diamondImg" alt="vip" class="chip-icon" />
             <span>开通会员，为Ta助力</span>
           </div>
 
           <button
             class="follow-btn"
-            :class="{ followed: detail.isFollow === 1 }"
+            :class="{ followed: detail.isFollow === 0 }"
             type="button"
             @click="toggleFollow"
           >
-            {{ detail.isFollow === 1 ? '已关注' : '关注' }}
+            {{ detail.isFollow === 0 ? '已关注' : '关注' }}
           </button>
 
           <button class="circle-btn icon-only" type="button">
-            <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-              <path
-                d="M14 4h6v6M10 14 20 4M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <img :src="favoriteImg" alt="favorite" class="icon-img" />
           </button>
         </div>
       </header>
@@ -97,32 +49,15 @@
             <h1 class="audio-title">{{ detail.title }}</h1>
             <div class="headline-actions">
               <button class="metric-button" type="button" @click="toggleLike">
-                <svg viewBox="0 0 24 24" class="icon-svg" :class="{ active: detail.isGood === 1 }" aria-hidden="true">
-                  <path
-                    d="M12 20.2s-7-4.4-7-10a4.2 4.2 0 0 1 7-2.9 4.2 4.2 0 0 1 7 2.9c0 5.6-7 10-7 10Z"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                <img :src="like1Img" alt="like" class="icon-img" :class="{ active: detail.isGood === 1 }" />
                 <span>{{ formatCount(detail.goodCount) }}</span>
               </button>
               <button class="metric-button" type="button" @click="toggleFav">
-                <svg viewBox="0 0 24 24" class="icon-svg" :class="{ active: detail.isFav === 1 }" aria-hidden="true">
-                  <path
-                    d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3L12 17.4 6.4 20.4l1.1-6.3L2.9 9.6l6.3-.9L12 3Z"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.9"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                <img :src="shoucangImg" alt="favorite" class="icon-img" :class="{ active: detail.isFav === 1 }" />
                 <span>{{ formatCount(detail.favCount) }}</span>
               </button>
               <button class="metric-button bullet-button" type="button">
-                <span class="bullet-label">弹</span>
+                <img :src="danImg" alt="favorite" class="icon-img" :class="{ active: detail.isBullet === 1 }" />
                 <span>{{ formatCount(detail.commentCount || 89) }}</span>
               </button>
             </div>
@@ -134,69 +69,9 @@
           </div>
         </section>
 
-        <!-- <section class="shortcut-grid">
-          <div v-for="item in shortcutItems" :key="item.key" class="shortcut-item">
-            <div class="shortcut-icon">
-              <svg v-if="item.key === 'cache'" viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <path
-                  d="M12 3v12M7 10l5 5 5-5M5 20h14"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.9"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <svg v-else-if="item.key === 'auto'" viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7" />
-                <path
-                  d="M9.6 16.4 12 7.8l2.4 8.6M10.4 13.4h3.2"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <svg v-else-if="item.key === 'coin'" viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7" />
-                <path
-                  d="M8.8 8.2h6.4M8 12h8M8.8 15.8h6.4M10 8.2v7.6M14 8.2v7.6"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <svg v-else-if="item.key === 'reward'" viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <path
-                  d="M12 3 9.4 8.4 3.5 9.2l4.3 4.2-1 5.9L12 16.4l5.2 2.9-1-5.9 4.3-4.2-5.9-.8L12 3Z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <svg v-else viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <path
-                  d="M8 5h8M12 5v8M7 10h10M5 21l4.2-3H19a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v13Z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-            <div class="shortcut-value">{{ item.value }}</div>
-            <div class="shortcut-label">{{ item.label }}</div>
-          </div>
-        </section> -->
-
         <section class="progress-section">
           <div class="progress-row">
-            <button class="rewind-chip" type="button" @click="skip(-15)">15</button>
+            <img :src="rewindChipImg" alt="favorite" class="rewind-chip" @click="skip(-15)" />
             <div class="progress-main">
               <div class="trial-pill-wrap" :style="{ left: `${trialProgress}%` }">
                 <div class="trial-pill">
@@ -215,56 +90,28 @@
                 <span>{{ formatTime(totalDuration) }}</span>
               </div>
             </div>
-            <button class="rewind-chip" type="button" @click="skip(15)">15</button>
+            <img :src="rewindChip1Img" alt="favorite" class="rewind-chip" @click="skip(-15)" />
           </div>
         </section>
 
         <section class="player-controls">
-          <button class="control-btn side-control" type="button">
-            <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-              <path
-                d="M4.5 12a7.5 7.5 0 0 1 13-5.2M19.5 12A7.5 7.5 0 0 1 7 17.5M4 7v-4h4M20 17v4h-4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span>连播</span>
-          </button>
-
-          <button class="control-btn previous-btn" type="button">
-            <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-              <path d="M18 6v12M16 17l-8-5 8-5v10Z" fill="currentColor" />
-            </svg>
-          </button>
-
-          <button class="play-button" type="button" @click="togglePlay">
-            <svg v-if="!isPlaying" viewBox="0 0 24 24" class="play-icon" aria-hidden="true">
-              <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor" />
-            </svg>
-            <svg v-else viewBox="0 0 24 24" class="play-icon" aria-hidden="true">
-              <path d="M9 7h2.8v10H9zm4.2 0H16v10h-2.8z" fill="currentColor" />
-            </svg>
-          </button>
-
-          <button class="control-btn next-btn" type="button">
-            <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-              <path d="M6 6v12M8 7l8 5-8 5V7Z" fill="currentColor" />
-            </svg>
-          </button>
 
           <button class="control-btn side-control align-right" type="button">
-            <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-              <path
-                d="M4 7h16M10 12h10M14 17h6"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
+            <img :src="playIconImg" alt="favorite" class="control-btn side-control" />
+            <span>连播</span>
+          </button>
+          <img :src="1 === 1 ? backImg : back1Img" alt="favorite" class="control-btn previous-btn" />
+          <img
+            :src="isPlaying ? follow1Img : followImg"
+            alt="favorite"
+            class="play-button"
+            @click="togglePlay"
+          />
+          <img :src="1 === 1 ? moreImg : more1Img" alt="favorite" class="control-btn next-btn" />
+
+
+          <button class="control-btn side-control align-right" type="button">
+            <img :src="plusImg" alt="favorite" class="control-btn side-control" />
             <span>{{ `${episodeLabel}期` }}</span>
           </button>
         </section>
@@ -272,14 +119,17 @@
         <section class="reward-board">
           <div class="reward-header">
             <div class="reward-title">打赏榜单</div>
-            <button class="more-btn" type="button">更多 ></button>
+            <button class="more-btn" type="button">
+              更多
+              <img :src="arrowRightImg" alt="favorite" class="more-arrow" />
+            </button>
           </div>
           <div class="reward-list">
             <div v-for="user in rewardUsers" :key="user.name + user.badge" class="reward-card">
               <div class="reward-avatar-shell" :style="{ '--accent': user.accent }">
                 <img v-if="user.image" :src="user.image" :alt="user.name" class="reward-avatar" />
                 <div v-else class="reward-avatar reward-fallback">{{ user.name.slice(0, 1) }}</div>
-                <span class="reward-badge">{{ user.badge }}</span>
+                <img v-if="user.badge === '1' || user.badge === '2' || user.badge === '3'" :src="user.badge === '1' ? crownSilverImg : user.badge === '2' ? crownSilver1Img : user.badge === '3' ? crownSilver2Img : ''" :alt="user.name" class="reward-badge" />
               </div>
             </div>
           </div>
@@ -288,16 +138,7 @@
         <section class="comment-board">
           <div class="comment-header">
             <button class="comment-collapse" type="button">
-              <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                <path
-                  d="m6 9 6 6 6-6"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.1"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <img :src="minusImg" alt="collapse" class="collapse-icon" />
             </button>
             <h2 class="comment-title">评论 ({{ commentTotal }})</h2>
             <div class="comment-tabs">
@@ -337,19 +178,10 @@
                   </div>
                 </div>
 
-                <button class="comment-like" type="button">
-                  <svg viewBox="0 0 24 24" class="icon-svg" :class="{ active: comment.liked }" aria-hidden="true">
-                    <path
-                      d="M12 20.2s-7-4.4-7-10a4.2 4.2 0 0 1 7-2.9 4.2 4.2 0 0 1 7 2.9c0 5.6-7 10-7 10Z"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.9"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                <div class="comment-like" type="button">
+                  <img :src="comment.liked ? likeImg : like1Img" alt="like" class="icon-img comment-like-icon" />
                   <span>{{ comment.likes }}</span>
-                </button>
+                </div>
               </div>
 
               <div class="comment-content">{{ comment.content }}</div>
@@ -360,16 +192,7 @@
                 type="button"
               >
                 一展开 {{ comment.replyCount }} 条回复
-                <svg viewBox="0 0 24 24" class="icon-svg" aria-hidden="true">
-                  <path
-                    d="m7 10 5 5 5-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                <img :src="arrowRightImg" alt="expand" class="reply-arrow" />
               </button>
 
               <div v-if="comment.replyPreview" class="reply-preview">
@@ -408,6 +231,27 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getListenDetail } from '../api/listen'
 import type { ListenVO } from '../types'
+import backImg from '../assets/images/back.png'
+import back1Img from '../assets/images/back-1.png'
+import followImg from '../assets/images/follow.png'
+import follow1Img from '../assets/images/follow-1.png'
+import plusImg from '../assets/images/plus.png'
+import moreImg from '../assets/images/more.png'
+import more1Img from '../assets/images/more-1.png'
+import danImg from '../assets/images/dan.png'
+import shoucangImg from '../assets/images/shoucang.png'
+import favoriteImg from '../assets/images/favorite.png'
+import playIconImg from '../assets/images/play-icon.png'
+import diamondImg from '../assets/images/diamond.png'
+import rewindChipImg from '../assets/images/rewind-chip.png'
+import rewindChip1Img from '../assets/images/rewind-chip-1.png'
+import arrowRightImg from '../assets/images/icon-arrow-right.png'
+import crownSilverImg from '../assets/images/crown-silver.png'
+import crownSilver1Img from '../assets/images/crown-silver-1.png'
+import crownSilver2Img from '../assets/images/crown-silver-2.png'
+import minusImg from '../assets/images/minus.png'
+import likeImg from '../assets/images/like.png'
+import like1Img from '../assets/images/like-1.png'
 
 const route = useRoute()
 const audioRef = ref<HTMLAudioElement | null>(null)
@@ -497,6 +341,7 @@ const createMockDetail = (): ListenVO => ({
 })
 
 const totalDuration = computed(() => Math.floor(audioDuration.value || detail.value?.duration || 0))
+const trialDuration = computed(() => Math.floor((totalDuration.value * trialProgress) / 100))
 const progress = computed(() => {
   if (!totalDuration.value) {
     return 0
@@ -612,6 +457,13 @@ const togglePlay = async () => {
     return
   }
 
+  if (trialDuration.value && audioRef.value.currentTime >= trialDuration.value) {
+    audioRef.value.currentTime = trialDuration.value
+    currentTime.value = trialDuration.value
+    isPlaying.value = false
+    return
+  }
+
   if (isPlaying.value) {
     audioRef.value.pause()
     isPlaying.value = false
@@ -628,6 +480,14 @@ const togglePlay = async () => {
 
 const onTimeUpdate = () => {
   if (!audioRef.value) {
+    return
+  }
+
+  if (trialDuration.value && audioRef.value.currentTime >= trialDuration.value) {
+    audioRef.value.currentTime = trialDuration.value
+    currentTime.value = trialDuration.value
+    audioRef.value.pause()
+    isPlaying.value = false
     return
   }
 
@@ -654,7 +514,8 @@ const seek = (event: MouseEvent) => {
 
   const target = event.currentTarget as HTMLElement
   const rect = target.getBoundingClientRect()
-  const percent = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1)
+  const maxPercent = trialProgress / 100
+  const percent = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), maxPercent)
   const nextTime = percent * totalDuration.value
 
   audioRef.value.currentTime = nextTime
@@ -666,7 +527,8 @@ const skip = (seconds: number) => {
     return
   }
 
-  const nextTime = Math.min(Math.max(audioRef.value.currentTime + seconds, 0), totalDuration.value)
+  const maxTime = trialDuration.value || totalDuration.value
+  const nextTime = Math.min(Math.max(audioRef.value.currentTime + seconds, 0), maxTime)
   audioRef.value.currentTime = nextTime
   currentTime.value = Math.floor(nextTime)
 }
@@ -721,6 +583,12 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:math';
+
+@function vw($px) {
+  @return math.div($px, 375px) * 100vw;
+}
+
 .listen-detail {
   min-height: 100vh;
   background:
@@ -731,7 +599,7 @@ onMounted(() => {
 
 .screen {
   min-height: 100vh;
-  padding: 10px 18px 110px;
+  padding: vw(10px) vw(18px) vw(110px);
   position: relative;
   overflow: hidden;
 }
@@ -739,8 +607,8 @@ onMounted(() => {
 .screen::before {
   content: '';
   position: absolute;
-  inset: -120px -80px auto;
-  height: 320px;
+  inset: vw(-120px) vw(-80px) auto;
+  height: vw(320px);
   background: radial-gradient(circle, rgba(45, 203, 179, 0.34) 0, rgba(45, 203, 179, 0) 68%);
   pointer-events: none;
 }
@@ -756,95 +624,95 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 0 8px;
-  font-size: 16px;
+  padding: vw(6px) 0 vw(8px);
+  font-size: vw(16px);
   font-weight: 600;
 }
 
 .status-icons {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: vw(8px);
 }
 
 .signal-bars {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
-  height: 14px;
+  gap: vw(2px);
+  height: vw(14px);
 }
 
 .signal-bars span {
-  width: 3px;
+  width: vw(3px);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
 }
 
 .signal-bars span:nth-child(1) {
-  height: 5px;
+  height: vw(5px);
 }
 
 .signal-bars span:nth-child(2) {
-  height: 8px;
+  height: vw(8px);
 }
 
 .signal-bars span:nth-child(3) {
-  height: 11px;
+  height: vw(11px);
 }
 
 .signal-bars span:nth-child(4) {
-  height: 14px;
+  height: vw(14px);
 }
 
 .status-icon {
-  width: 18px;
-  height: 18px;
+  width: vw(18px);
+  height: vw(18px);
 }
 
 .battery {
-  width: 24px;
-  height: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.92);
-  border-radius: 4px;
+  width: vw(24px);
+  height: vw(12px);
+  border: vw(1.5px) solid rgba(255, 255, 255, 0.92);
+  border-radius: vw(4px);
   position: relative;
 }
 
 .battery-cap {
   position: absolute;
-  top: 3px;
-  right: -3px;
-  width: 2px;
-  height: 4px;
+  top: vw(3px);
+  right: vw(-3px);
+  width: vw(2px);
+  height: vw(4px);
   border-radius: 0 999px 999px 0;
   background: rgba(255, 255, 255, 0.92);
 }
 
 .battery-core {
   position: absolute;
-  inset: 2px;
-  border-radius: 2px;
+  inset: vw(2px);
+  border-radius: vw(2px);
   background: rgba(255, 255, 255, 0.92);
 }
 
 .top-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: vw(10px);
 }
 
 .top-bar-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: vw(8px);
 }
 
 .author-pill {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  max-width: 124px;
+  gap: vw(10px);
+  max-width: vw(112px);
 }
 
 .author-name {
@@ -852,15 +720,15 @@ onMounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: vw(12px);
+  color: #cccccc;
 }
 
 .author-avatar,
 .author-avatar-fallback {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: vw(20px);
+  height: vw(20px);
+  border-radius: vw(4px);
   flex-shrink: 0;
   object-fit: cover;
 }
@@ -870,7 +738,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #4fc3b8 0%, #22516f 100%);
-  font-size: 14px;
+  font-size: vw(14px);
   font-weight: 600;
 }
 
@@ -903,8 +771,8 @@ onMounted(() => {
 }
 
 .icon-only {
-  width: 30px;
-  height: 30px;
+  width: vw(30px);
+  height: vw(30px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -914,56 +782,59 @@ onMounted(() => {
 .vip-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 12px;
+  gap: vw(6px);
+  padding: vw(6px) vw(11px);
+  border-radius: vw(8px);
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255);
+  font-size: vw(11px);
   line-height: 1;
   white-space: nowrap;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(vw(12px));
 }
 
 .chip-icon {
-  width: 14px;
-  height: 14px;
+  width: vw(14px);
+  height: vw(14px);
   color: #f6c35d;
 }
 
 .follow-btn {
-  min-width: 58px;
-  height: 32px;
-  padding: 0 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #3fd1c0 0%, #148b84 100%);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
+  min-width: vw(45px);
+  height: vw(20px);
+  padding: 0 vw(11px);
+  border-radius: vw(6px);
+  color: #6bedf2;
+  border: vw(1px) solid #6bedf2;
+  font-size: vw(11px);
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .follow-btn.followed {
-  background: rgba(255, 255, 255, 0.18);
-  color: rgba(255, 255, 255, 0.82);
+  border-color: #888888;
+  color: #888888;
 }
 
 .content {
-  padding-top: 54px;
+  padding-top: vw(26px);
 }
 
 .cover-card {
   position: relative;
-  width: min(100%, 304px);
+  width: min(100%, vw(240px));
   margin: 0 auto;
-  border-radius: 18px;
+  border-radius: vw(18px);
 }
 
 .cover-shadow {
   position: absolute;
-  inset: 16px 18px -20px;
-  border-radius: 18px;
+  inset: vw(16px) vw(18px) vw(-20px);
+  border-radius: vw(18px);
   background: rgba(0, 0, 0, 0.42);
-  filter: blur(22px);
+  filter: blur(vw(22px));
 }
 
 .cover-image {
@@ -972,47 +843,52 @@ onMounted(() => {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 18px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+  border-radius: vw(18px);
+  box-shadow: 0 vw(24px) vw(48px) rgba(0, 0, 0, 0.34);
 }
 
 .title-section {
-  margin-top: 42px;
+  margin-top: vw(24px);
 }
 
 .title-row {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: vw(16px);
 }
 
 .audio-title {
   flex: 1;
   margin: 0;
-  font-size: 23px;
+  font-size: vw(16px);
   line-height: 1.28;
-  letter-spacing: 0.2px;
+  letter-spacing: vw(0.2px);
   font-weight: 700;
 }
 
 .headline-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: vw(14px);
 }
 
 .metric-button {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: vw(4px);
   color: rgba(255, 255, 255, 0.64);
-  font-size: 14px;
+  font-size: vw(14px);
 }
 
 .metric-button .icon-svg {
-  width: 28px;
-  height: 28px;
+  width: vw(28px);
+  height: vw(28px);
+}
+
+.metric-button .icon-img {
+  width: vw(28px);
+  height: vw(28px);
 }
 
 .metric-button .active {
@@ -1020,43 +896,47 @@ onMounted(() => {
 }
 
 .bullet-button {
-  gap: 6px;
+  gap: vw(6px);
 }
 
 .bullet-label {
-  width: 30px;
-  height: 30px;
+  width: vw(30px);
+  height: vw(30px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid currentColor;
+  border: vw(1.5px) solid currentColor;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: vw(14px);
 }
 
 .meta-row {
-  margin-top: 12px;
+  margin-top: vw(12px);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: vw(10px);
   color: rgba(255, 255, 255, 0.56);
-  font-size: 14px;
+  font-size: vw(14px);
+}
+
+.breadcrumb {
+  font-size: vw(12px);
 }
 
 .subscribe-tag {
-  padding: 2px 10px;
-  border: 1px solid #41dad1;
-  border-radius: 6px;
+  padding: vw(2px) vw(10px);
+  border: vw(1px) solid #41dad1;
+  border-radius: vw(4px);
   color: #6deade;
   line-height: 1.35;
-  font-size: 12px;
+  font-size: vw(10px);
 }
 
 .shortcut-grid {
-  margin-top: 28px;
+  margin-top: vw(20px);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px 6px;
+  gap: vw(12px) vw(6px);
 }
 
 .shortcut-item {
@@ -1065,63 +945,68 @@ onMounted(() => {
 }
 
 .shortcut-icon {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 8px;
+  width: vw(30px);
+  height: vw(30px);
+  margin: 0 auto vw(7px);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: vw(18px);
+  line-height: 1;
+}
+
+.shortcut-icon.outlined {
+  border: vw(1.5px) solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  font-size: vw(15px);
 }
 
 .shortcut-icon .icon-svg {
-  width: 30px;
-  height: 30px;
+  width: vw(30px);
+  height: vw(30px);
 }
 
 .shortcut-value {
-  min-height: 17px;
-  font-size: 22px;
+  min-height: vw(17px);
+  font-size: vw(22px);
   line-height: 1;
   color: rgba(255, 255, 255, 0.86);
 }
 
 .shortcut-label {
-  margin-top: 6px;
-  font-size: 14px;
+  margin-top: vw(5px);
+  font-size: vw(13px);
 }
 
 .progress-section {
-  margin-top: 28px;
+  margin-top: vw(8px);
 }
 
 .progress-row {
   display: grid;
-  grid-template-columns: 28px 1fr 28px;
+  grid-template-columns: vw(28px) 1fr vw(28px);
   align-items: center;
-  column-gap: 12px;
+  column-gap: vw(12px);
 }
 
 .progress-main {
   position: relative;
-  padding-top: 46px;
+  padding-top: 0;
 }
 
 .time-row {
-  margin-top: 10px;
+  margin-top: vw(8px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: vw(13px);
   color: rgba(255, 255, 255, 0.82);
 }
 
 .rewind-chip {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 12px;
+  width: vw(19px);
+  height: vw(21px);
 }
 
 .progress-bar {
@@ -1133,9 +1018,9 @@ onMounted(() => {
   position: relative;
   display: block;
   width: 100%;
-  height: 4px;
+  height: vw(6px);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .progress-fill {
@@ -1148,59 +1033,70 @@ onMounted(() => {
 .progress-thumb {
   position: absolute;
   top: 50%;
-  width: 10px;
-  height: 10px;
+  width: vw(12px);
+  height: vw(12px);
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14);
   transform: translate(-50%, -50%);
 }
 
 .trial-thumb {
   position: absolute;
   top: 50%;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  width: vw(4px);
+  height: vw(12px);
+  border-radius: 999px;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.14);
   transform: translate(-50%, -50%);
 }
 
 .trial-pill-wrap {
   position: absolute;
-  top: 0;
+  top: vw(18px);
   transform: translateX(-50%);
-}
-
-.trial-pill-wrap::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  width: 10px;
-  height: 10px;
-  background: rgba(112, 125, 140, 0.72);
-  transform: translateX(-50%) rotate(45deg);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .trial-pill {
-  width: fit-content;
-  max-width: min(100vw - 88px, 260px);
-  padding: 8px 14px;
-  border-radius: 14px;
-  background: rgba(112, 125, 140, 0.72);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 13px;
-  line-height: 1.3;
+  padding: vw(7px) vw(12px);
+  border-radius: vw(12px);
+  background: rgba(53, 68, 86, 0.95);
+  color: #d9dde3;
+  font-size: vw(13px);
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .player-controls {
-  margin-top: 28px;
+  margin-top: vw(34px);
   display: grid;
-  grid-template-columns: 52px 48px 1fr 48px 52px;
+  grid-template-columns: vw(52px) vw(48px) 1fr vw(48px) vw(52px);
   align-items: center;
-  gap: 12px;
+  gap: vw(12px);
+}
+
+.wifi-icon {
+  width: vw(16px);
+  height: vw(12px);
+  border: vw(1.8px) solid rgba(255, 255, 255, 0.9);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 0 0 vw(12px) vw(12px);
+  position: relative;
+}
+
+.wifi-icon::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: vw(1px);
+  width: vw(4px);
+  height: vw(4px);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  transform: translateX(-50%);
 }
 
 .control-btn {
@@ -1208,16 +1104,22 @@ onMounted(() => {
 }
 
 .control-btn .icon-svg {
-  width: 32px;
-  height: 32px;
+  width: vw(32px);
+  height: vw(32px);
+}
+
+img.control-btn.side-control {
+  width: vw(28px);
+  height: vw(28px);
+  object-fit: contain;
 }
 
 .side-control {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
-  font-size: 14px;
+  gap: vw(6px);
+  font-size: vw(14px);
   line-height: 1;
 }
 
@@ -1234,34 +1136,41 @@ onMounted(() => {
 
 .previous-btn .icon-svg,
 .next-btn .icon-svg {
-  width: 38px;
-  height: 38px;
+  width: vw(38px);
+  height: vw(38px);
+}
+
+img.control-btn.previous-btn,
+img.control-btn.next-btn {
+  width: vw(34px);
+  height: vw(40px);
+  object-fit: contain;
 }
 
 .play-button {
-  width: 78px;
-  height: 78px;
+  width: vw(78px);
+  height: vw(78px);
   margin: 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 24px;
+  border-radius: vw(24px);
   background: #f4f5f7;
   color: #101114;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 vw(18px) vw(40px) rgba(0, 0, 0, 0.24);
 }
 
 .play-icon {
-  width: 34px;
-  height: 34px;
+  width: vw(34px);
+  height: vw(34px);
 }
 
 .reward-board {
-  margin-top: 34px;
-  padding: 18px 16px 20px;
-  border-radius: 16px;
+  margin-top: vw(34px);
+  padding: vw(18px) vw(16px) vw(20px);
+  border-radius: vw(16px);
   background: rgba(8, 23, 36, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 vw(1px) 0 rgba(255, 255, 255, 0.04);
 }
 
 .reward-header {
@@ -1271,24 +1180,33 @@ onMounted(() => {
 }
 
 .reward-title {
-  font-size: 18px;
+  font-size: vw(18px);
   font-weight: 700;
   color: #f1fffc;
   text-shadow:
     0 0 0 #000,
-    0 0 10px rgba(57, 255, 232, 0.35);
+    0 0 vw(10px) rgba(57, 255, 232, 0.35);
 }
 
 .more-btn {
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: vw(4px);
+  font-size: vw(14px);
   color: rgba(255, 255, 255, 0.56);
 }
 
+.more-arrow {
+  width: vw(10px);
+  height: vw(20px);
+  object-fit: contain;
+}
+
 .reward-list {
-  margin-top: 14px;
+  margin-top: vw(14px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: vw(12px);
 }
 
 .reward-card {
@@ -1298,17 +1216,17 @@ onMounted(() => {
 
 .reward-avatar-shell {
   position: relative;
-  width: 62px;
-  height: 62px;
-  padding: 4px;
-  border-radius: 18px;
+  width: vw(62px);
+  height: vw(62px);
+  padding: vw(4px);
+  border-radius: vw(18px);
   background: linear-gradient(180deg, var(--accent) 0%, rgba(255, 255, 255, 0.06) 100%);
 }
 
 .reward-avatar {
   width: 100%;
   height: 100%;
-  border-radius: 14px;
+  border-radius: vw(14px);
   object-fit: cover;
   background: #213040;
 }
@@ -1317,49 +1235,42 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: vw(24px);
   font-weight: 700;
   color: #fff;
 }
 
 .reward-badge {
   position: absolute;
-  top: -10px;
-  left: 8px;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #111;
-  font-size: 12px;
-  font-weight: 700;
+  top: vw(-12px);
+  left: vw(4px);
+  width: vw(28px);
+  height: vw(24px);
+  object-fit: contain;
 }
 
 .comment-board {
-  margin-top: 16px;
-  padding: 18px 12px 12px;
-  border-radius: 18px;
+  margin-top: vw(16px);
+  padding: vw(18px) vw(12px) vw(12px);
+  border-radius: vw(18px);
   background:
     linear-gradient(180deg, rgba(11, 31, 47, 0.96) 0%, rgba(5, 16, 27, 0.96) 100%),
     rgba(8, 23, 36, 0.9);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 18px 36px rgba(0, 0, 0, 0.16);
+    inset 0 vw(1px) 0 rgba(255, 255, 255, 0.04),
+    0 vw(18px) vw(36px) rgba(0, 0, 0, 0.16);
 }
 
 .comment-header {
   display: grid;
-  grid-template-columns: 28px 1fr auto;
+  grid-template-columns: vw(28px) 1fr auto;
   align-items: center;
-  gap: 10px;
+  gap: vw(10px);
 }
 
 .comment-collapse {
-  width: 28px;
-  height: 28px;
+  width: vw(28px);
+  height: vw(28px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1367,11 +1278,18 @@ onMounted(() => {
   border: 0;
   padding: 0;
   background: transparent;
+  cursor: pointer;
+}
+
+.collapse-icon {
+  width: vw(16px);
+  height: vw(9px);
+  object-fit: contain;
 }
 
 .comment-title {
   margin: 0;
-  font-size: 17px;
+  font-size: vw(17px);
   font-weight: 700;
   color: rgba(255, 255, 255, 0.96);
 }
@@ -1379,18 +1297,18 @@ onMounted(() => {
 .comment-tabs {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: vw(6px);
 }
 
 .comment-tab {
-  min-width: 54px;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 12px;
+  min-width: vw(54px);
+  height: vw(34px);
+  padding: 0 vw(12px);
+  border-radius: vw(12px);
   border: 0;
   background: transparent;
   color: rgba(255, 255, 255, 0.72);
-  font-size: 14px;
+  font-size: vw(14px);
 }
 
 .comment-tab.active {
@@ -1400,35 +1318,35 @@ onMounted(() => {
 }
 
 .comment-list {
-  margin-top: 12px;
+  margin-top: vw(12px);
 }
 
 .comment-item + .comment-item {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(80, 121, 153, 0.34);
+  margin-top: vw(20px);
+  padding-top: vw(20px);
+  border-top: vw(1px) solid rgba(80, 121, 153, 0.34);
 }
 
 .comment-main {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: vw(12px);
 }
 
 .comment-user {
   min-width: 0;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: vw(10px);
   flex: 1;
 }
 
 .comment-avatar,
 .comment-avatar-fallback {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: vw(42px);
+  height: vw(42px);
+  border-radius: vw(12px);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -1439,7 +1357,7 @@ onMounted(() => {
   justify-content: center;
   background: linear-gradient(135deg, var(--avatar-accent) 0%, rgba(34, 81, 111, 0.95) 100%);
   color: #fff;
-  font-size: 18px;
+  font-size: vw(18px);
   font-weight: 700;
 }
 
@@ -1449,80 +1367,86 @@ onMounted(() => {
 
 .comment-name {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 15px;
+  font-size: vw(15px);
   font-weight: 600;
 }
 
 .comment-time {
-  margin-top: 2px;
+  margin-top: vw(2px);
   color: rgba(255, 255, 255, 0.48);
-  font-size: 13px;
+  font-size: vw(13px);
 }
 
 .comment-like {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: rgba(255, 255, 255, 0.66);
+  gap: vw(4px);
 }
 
 .comment-like .icon-svg {
-  width: 26px;
-  height: 26px;
+  width: vw(26px);
+  height: vw(26px);
 }
 
-.comment-like .active {
-  color: #ff3d78;
+.comment-like .comment-like-icon {
+  width: vw(26px);
+  height: vw(26px);
 }
 
 .comment-content {
-  margin: 12px 50px 0 52px;
+  margin: vw(12px) vw(50px) 0 vw(52px);
   color: rgba(255, 255, 255, 0.96);
-  font-size: 17px;
+  font-size: vw(17px);
   line-height: 1.6;
 }
 
 .reply-expand {
-  margin: 14px 0 0 52px;
+  margin: vw(14px) 0 0 vw(52px);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: vw(4px);
   color: rgba(255, 255, 255, 0.42);
-  font-size: 14px;
+  font-size: vw(14px);
   border: 0;
   padding: 0;
   background: transparent;
 }
 
 .reply-expand .icon-svg {
-  width: 18px;
-  height: 18px;
+  width: vw(18px);
+  height: vw(18px);
+}
+
+.reply-arrow {
+  width: vw(10px);
+  height: vw(20px);
+  object-fit: contain;
 }
 
 .reply-preview {
-  margin: 14px 0 0 52px;
-  padding: 14px 14px 12px;
-  border-radius: 12px;
+  margin: vw(14px) 0 0 vw(52px);
+  padding: vw(14px) vw(14px) vw(12px);
+  border-radius: vw(12px);
   background: rgba(108, 123, 145, 0.34);
 }
 
 .reply-author {
   color: rgba(255, 255, 255, 0.72);
-  font-size: 13px;
+  font-size: vw(13px);
 }
 
 .reply-text {
-  margin-top: 6px;
+  margin-top: vw(6px);
   color: rgba(255, 255, 255, 0.92);
-  font-size: 15px;
+  font-size: vw(15px);
   line-height: 1.5;
 }
 
 .reply-time {
-  margin-top: 8px;
+  margin-top: vw(8px);
   color: rgba(255, 255, 255, 0.45);
-  font-size: 12px;
+  font-size: vw(12px);
 }
 
 .comment-composer {
@@ -1530,45 +1454,53 @@ onMounted(() => {
   left: 50%;
   bottom: 0;
   z-index: 5;
-  width: min(100%, 750px);
-  padding: 10px 22px 18px;
+  width: 100%;
+  padding: vw(10px) vw(22px) vw(18px);
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: vw(14px);
   transform: translateX(-50%);
   background: linear-gradient(180deg, rgba(5, 16, 27, 0) 0%, rgba(5, 16, 27, 0.96) 24%, rgba(5, 16, 27, 0.98) 100%);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(vw(14px));
 }
 
 .locked-tip-line {
   flex-shrink: 0;
-  width: 76px;
-  height: 2px;
+  width: vw(76px);
+  height: vw(2px);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.38);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 vw(20px) rgba(255, 255, 255, 0.08);
 }
 
 .locked-tip-pill {
   flex: 1;
-  min-height: 52px;
-  padding: 0 28px;
+  min-height: vw(52px);
+  padding: 0 vw(28px);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background: #67dde3;
   color: #12313d;
-  font-size: 20px;
+  font-size: vw(20px);
   font-weight: 700;
-  letter-spacing: 0.5px;
-  box-shadow: 0 12px 24px rgba(103, 221, 227, 0.2);
+  letter-spacing: vw(0.5px);
+  box-shadow: 0 vw(12px) vw(24px) rgba(103, 221, 227, 0.2);
 }
 
 .icon-svg {
-  width: 24px;
-  height: 24px;
+  width: vw(24px);
+  height: vw(24px);
   display: block;
+}
+
+.icon-img {
+  width: vw(24px);
+  height: vw(24px);
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .state-block {
@@ -1577,27 +1509,27 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: vw(14px);
   color: rgba(255, 255, 255, 0.82);
 }
 
 .state-error {
-  padding: 24px;
+  padding: vw(24px);
   text-align: center;
 }
 
 .retry-btn {
-  min-width: 112px;
-  height: 40px;
+  min-width: vw(112px);
+  height: vw(40px);
   border-radius: 999px;
   background: linear-gradient(135deg, #3fd1c0 0%, #148b84 100%);
   color: #fff;
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.18);
+  width: vw(40px);
+  height: vw(40px);
+  border: vw(3px) solid rgba(255, 255, 255, 0.18);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -1606,73 +1538,6 @@ onMounted(() => {
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@media (max-width: 420px) {
-  .screen {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-
-  .top-bar {
-    gap: 8px;
-  }
-
-  .author-pill {
-    max-width: 92px;
-  }
-
-  .vip-chip {
-    padding-left: 9px;
-    padding-right: 9px;
-    font-size: 11px;
-  }
-
-  .content {
-    padding-top: 42px;
-  }
-
-  .audio-title {
-    font-size: 20px;
-  }
-
-  .progress-row {
-    column-gap: 8px;
-  }
-
-  .progress-main {
-    padding-top: 42px;
-  }
-
-  .trial-pill {
-    max-width: min(100vw - 72px, 220px);
-  }
-
-  .comment-content,
-  .reply-expand,
-  .reply-preview {
-    margin-left: 0;
-  }
-
-  .comment-content {
-    margin-right: 0;
-  }
-
-  .comment-composer {
-    padding-left: 14px;
-    padding-right: 14px;
-    gap: 10px;
-  }
-
-  .locked-tip-line {
-    width: 44px;
-  }
-
-  .locked-tip-pill {
-    min-height: 48px;
-    padding: 0 20px;
-    font-size: 18px;
   }
 }
 </style>

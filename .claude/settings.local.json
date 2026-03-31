@@ -18,7 +18,14 @@
       "mcp__figma__whoami",
       "Bash(npm create:*)",
       "Bash(npm install:*)",
-      "Bash(npm list:*)"
+      "Bash(npm list:*)",
+      "Bash(mv \"Frame.png\" \"play-icon.png\")",
+      "Bash(mv \"Frame 7687.png\" \"arrow-right.png\")",
+      "Bash(mv \"Frame 7688.png\" \"crown-gold.png\")",
+      "Bash(mv \"Frame 7749.png\" \"favorite.png\")",
+      "Bash(mv \"Frame 7750.png\" \"share.png\")",
+      "Bash(cd:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

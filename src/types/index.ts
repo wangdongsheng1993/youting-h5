@@ -44,6 +44,7 @@ export interface ListenVO {
   tagList: string[]
   isFav: number
   isGood: number
+  isBullet?: number
   isFollow: number
   cainaLook: CarouselImage | null
 }
