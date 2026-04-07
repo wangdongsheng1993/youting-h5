@@ -12,9 +12,9 @@
       <header class="top-bar">
 
         <div class="author-pill">
-          <img v-if="avatarSource" :src="avatarSource" alt="avatar" class="author-avatar" />
+          <!-- <img v-if="avatarSource" :src="avatarSource" alt="avatar" class="author-avatar" />
           <div v-else class="author-avatar author-avatar-fallback">{{ displayName.slice(0, 1) }}</div>
-          <span class="author-name">{{ displayName }}</span>
+          <span class="author-name">{{ displayName }}</span> -->
         </div>
 
         <div class="top-bar-actions">
@@ -63,7 +63,7 @@
           </div>
 
           <div class="meta-row">
-            <span class="breadcrumb">{{ detail.cainaLook?.title || '通往异世界大门' }} ></span>
+            <span v-if="detail.cainaLook?.title" class="breadcrumb">{{ detail.cainaLook?.title || '通往异世界大门' }} ></span>
             <span class="subscribe-tag">订阅</span>
           </div>
         </section>
@@ -105,7 +105,7 @@
           </button>
           <img :src="1 === 1 ? backImg : back1Img" alt="favorite" class="control-btn previous-btn" @click="showDownloadTip" />
           <img
-            :src="isPlaying ? follow1Img : followImg"
+            :src="isPlaying ? followImg : follow1Img"
             alt="favorite"
             class="play-button"
             @click="togglePlay"
@@ -115,7 +115,7 @@
 
           <button class="control-btn side-control align-right" type="button" @click="showDownloadTip">
             <img :src="plusImg" alt="favorite" class="control-btn side-control" />
-            <span>{{ `${episodeLabel}期` }}</span>
+            <span style="width: max-content;">{{ `${episodeLabel}期` }}</span>
           </button>
         </section>
 
@@ -468,7 +468,7 @@ const fetchData = async () => {
   try {
     // 从URL获取参数
     const params = getUrlParams()
-    const id = Number(params.id) || Number(route.params.id) || 1309
+    const id = Number(params.id) || 1309
     const targetType = Number(params.targetType) || 2
     
     contentId.value = id

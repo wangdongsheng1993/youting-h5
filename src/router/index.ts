@@ -6,10 +6,10 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/listen/1309'
+      redirect: '/listen?id=1309'
     },
     {
-      path: '/listen/:id',
+      path: '/listen',
       name: 'listen-detail',
       component: ListenDetail
     }
