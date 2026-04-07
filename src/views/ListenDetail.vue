@@ -49,16 +49,15 @@
             <h1 class="audio-title">{{ detail.title }}</h1>
             <div class="headline-actions">
               <button class="metric-button" type="button" @click="toggleLike">
-                <img :src="like1Img" alt="like" class="icon-img" :class="{ active: detail.isGood === 1 }" />
+                <img :src="dislikeImg" alt="like" class="icon-img" :class="{ active: detail.isGood === 1 }" />
                 <span>{{ formatCount(detail.goodCount) }}</span>
               </button>
               <button class="metric-button" type="button" @click="toggleFav">
-                <img :src="shoucangImg" alt="favorite" class="icon-img" :class="{ active: detail.isFav === 1 }" />
+                <img :src="uncollectedImg" alt="favorite" class="icon-img" :class="{ active: detail.isFav === 1 }" />
                 <span>{{ formatCount(detail.favCount) }}</span>
               </button>
               <button class="metric-button bullet-button" type="button">
-                <img :src="danImg" alt="favorite" class="icon-img" :class="{ active: detail.isBullet === 1 }" />
-                <span>{{ formatCount(detail.commentCount || 89) }}</span>
+                <img :src="danmuImg" alt="favorite" class="icon-img" :class="{ active: detail.isBullet === 1 }" />
               </button>
             </div>
           </div>
@@ -69,13 +68,17 @@
           </div>
         </section>
 
+        <section class="-section">
+
+        </section>
+
         <section class="progress-section">
           <div class="progress-row">
-            <img :src="rewindChipImg" alt="favorite" class="rewind-chip" @click="skip(-15)" />
+            <img :src="rewindChipImg" alt="rewind" class="rewind-chip" @click="skip(-15)" />
             <div class="progress-main">
-              <div class="trial-pill-wrap" :style="{ left: `${trialProgress}%` }">
+              <div class="trial-pill-wrap">
                 <div class="trial-pill">
-                  试听30%，收听完整版请充值或补充广告币
+                  试听30%，收听完整版请<span style="color: #6bedf2;" @click="showDownloadTip">充值</span>或<span style="color: #6bedf2;" @click="showDownloadTip">补充广告币</span>
                 </div>
               </div>
               <button class="progress-bar" type="button" @click="seek">
@@ -90,27 +93,27 @@
                 <span>{{ formatTime(totalDuration) }}</span>
               </div>
             </div>
-            <img :src="rewindChip1Img" alt="favorite" class="rewind-chip" @click="skip(-15)" />
+            <img :src="rewindChip1Img" alt="forward" class="rewind-chip" @click="skip(15)" />
           </div>
         </section>
 
         <section class="player-controls">
 
-          <button class="control-btn side-control align-right" type="button">
+          <button class="control-btn side-control align-right" type="button" @click="showDownloadTip">
             <img :src="playIconImg" alt="favorite" class="control-btn side-control" />
             <span>连播</span>
           </button>
-          <img :src="1 === 1 ? backImg : back1Img" alt="favorite" class="control-btn previous-btn" />
+          <img :src="1 === 1 ? backImg : back1Img" alt="favorite" class="control-btn previous-btn" @click="showDownloadTip" />
           <img
             :src="isPlaying ? follow1Img : followImg"
             alt="favorite"
             class="play-button"
             @click="togglePlay"
           />
-          <img :src="1 === 1 ? moreImg : more1Img" alt="favorite" class="control-btn next-btn" />
+          <img :src="1 === 1 ? moreImg : more1Img" alt="favorite" class="control-btn next-btn" @click="showDownloadTip" />
 
 
-          <button class="control-btn side-control align-right" type="button">
+          <button class="control-btn side-control align-right" type="button" @click="showDownloadTip">
             <img :src="plusImg" alt="favorite" class="control-btn side-control" />
             <span>{{ `${episodeLabel}期` }}</span>
           </button>
@@ -118,18 +121,26 @@
 
         <section class="reward-board">
           <div class="reward-header">
-            <div class="reward-title">打赏榜单</div>
-            <button class="more-btn" type="button">
+            <div class="reward-title">
+              <img :src="rewardTitleBgImg" alt="reward title background" class="reward-title-bg" />
+              <span>打赏榜单</span>
+            </div>
+            <button class="more-btn" type="button" @click="showDownloadTip">
               更多
               <img :src="arrowRightImg" alt="favorite" class="more-arrow" />
             </button>
           </div>
           <div class="reward-list">
-            <div v-for="user in rewardUsers" :key="user.name + user.badge" class="reward-card">
-              <div class="reward-avatar-shell" :style="{ '--accent': user.accent }">
-                <img v-if="user.image" :src="user.image" :alt="user.name" class="reward-avatar" />
-                <div v-else class="reward-avatar reward-fallback">{{ user.name.slice(0, 1) }}</div>
-                <img v-if="user.badge === '1' || user.badge === '2' || user.badge === '3'" :src="user.badge === '1' ? crownSilverImg : user.badge === '2' ? crownSilver1Img : user.badge === '3' ? crownSilver2Img : ''" :alt="user.name" class="reward-badge" />
+            <div v-for="(user, index) in topHelpPiaoList" :key="user.id || index" class="reward-card">
+              <div class="reward-avatar-shell" :style="{ '--accent': accent[index] || '#F6BE53' }">
+                <img v-if="user.user?.imagePath" :src="user.user?.imagePath" :alt="user.user?.nickName" class="reward-avatar" />
+                <div v-else class="reward-avatar reward-fallback">{{ user.user?.nickName?.slice(0, 1) || 'U' }}</div>
+                <img v-if="index < 3" :src="index === 0 ? crownSilverImg : index === 1 ? crownSilver1Img : crownSilver2Img" :alt="user.user?.nickName" class="reward-badge" />
+              </div>
+            </div>
+            <div v-if="topHelpPiaoList.length === 0" class="reward-card">
+              <div class="reward-avatar-shell" style="--accent: transparent">
+                <div class="reward-avatar reward-fallback">无</div>
               </div>
             </div>
           </div>
@@ -137,10 +148,10 @@
 
         <section class="comment-board">
           <div class="comment-header">
-            <button class="comment-collapse" type="button">
+            <button class="comment-collapse" type="button" @click="showDownloadTip">
               <img :src="minusImg" alt="collapse" class="collapse-icon" />
             </button>
-            <h2 class="comment-title">评论 ({{ commentTotal }})</h2>
+            <h2 class="comment-title">评论 ({{ commentTotalCount }})</h2>
             <div class="comment-tabs">
               <button
                 v-for="tab in commentTabs"
@@ -148,7 +159,7 @@
                 class="comment-tab"
                 :class="{ active: currentCommentTab === tab.key }"
                 type="button"
-                @click="currentCommentTab = tab.key"
+                @click="changeCommentTab(tab.key)"
               >
                 {{ tab.label }}
               </button>
@@ -160,9 +171,9 @@
               <div class="comment-main">
                 <div class="comment-user">
                   <img
-                    v-if="comment.avatar"
-                    :src="comment.avatar"
-                    :alt="comment.author"
+                    v-if="comment.user.imagePath"
+                    :src="comment.user.imagePath"
+                    :alt="comment.user.nickName"
                     class="comment-avatar"
                   />
                   <div
@@ -170,16 +181,16 @@
                     class="comment-avatar comment-avatar-fallback"
                     :style="{ '--avatar-accent': comment.avatarAccent }"
                   >
-                    {{ comment.author.slice(0, 1) }}
+                    {{ comment.user.nickName.slice(0, 1) }}
                   </div>
                   <div class="comment-meta">
-                    <div class="comment-name">{{ comment.author }}</div>
-                    <div class="comment-time">{{ comment.time }}</div>
+                    <div class="comment-name">{{ comment.user.nickName }}</div>
+                    <div class="comment-time">{{ comment.createTime }}</div>
                   </div>
                 </div>
 
-                <div class="comment-like" type="button">
-                  <img :src="comment.liked ? likeImg : like1Img" alt="like" class="icon-img comment-like-icon" />
+                <div class="comment-like" type="button" @click="showDownloadTip">
+                  <img :src="comment.liked ? likeImg : dislikeImg" alt="like" class="icon-img comment-like-icon" />
                   <span>{{ comment.likes }}</span>
                 </div>
               </div>
@@ -190,12 +201,21 @@
                 v-if="comment.replyCount"
                 class="reply-expand"
                 type="button"
+                @click="toggleReply(comment.id)"
               >
-                一展开 {{ comment.replyCount }} 条回复
-                <img :src="arrowRightImg" alt="expand" class="reply-arrow" />
+                {{ comment.showReply ? '收起回复' : `展开 ${comment.replyCount} 条回复` }}
+                <img :src="arrowRightImg" alt="expand" class="reply-arrow" :class="{ rotated: comment.showReply }" />
               </button>
 
-              <div v-if="comment.replyPreview" class="reply-preview">
+              <div v-if="comment.showReply && comment.replies" class="reply-list">
+                <div v-for="reply in comment.replies" :key="reply.id" class="reply-item">
+                  <div class="reply-author">{{ reply.author }}</div>
+                  <div class="reply-text">{{ reply.content }}</div>
+                  <div class="reply-time">{{ reply.time }}</div>
+                </div>
+              </div>
+
+              <div v-else-if="comment.replyPreview" class="reply-preview">
                 <div class="reply-author">{{ comment.replyPreview.author }}</div>
                 <div class="reply-text">{{ comment.replyPreview.content }}</div>
                 <div class="reply-time">{{ comment.replyPreview.time }}</div>
@@ -223,35 +243,60 @@
       <span>{{ error || '页面加载失败' }}</span>
       <button class="retry-btn" type="button" @click="fetchData">重新加载</button>
     </div>
+
+    <!-- 提示弹窗 -->
+    <div v-if="showTip" class="tip-modal">
+      <div class="tip-content">
+        <button class="tip-close" @click="closeTip">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="tip-icon">
+          <div class="welcome-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <circle cx="30" cy="30" r="28" fill="rgba(255,255,255,0.2)"/>
+              <path d="M20 30C20 24.4772 24.4772 20 30 20C35.5228 20 40 24.4772 40 30C40 35.5228 35.5228 40 30 40C24.4772 40 20 35.5228 20 30Z" fill="white"/>
+              <circle cx="30" cy="30" r="10" fill="#4fc3b8"/>
+              <path d="M26 30L29 33L36 26" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="tip-title">欢迎下载 <span class="app-name">有听故事圈</span></h3>
+        <button class="tip-button" @click="jumpToApp">立即下载</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getListenDetail } from '../api/listen'
+import { getListenDetail, getListenTopHelpPiao, getCommentList } from '../api/listen'
 import type { ListenVO } from '../types'
-import backImg from '../assets/images/back.png'
-import back1Img from '../assets/images/back-1.png'
-import followImg from '../assets/images/follow.png'
-import follow1Img from '../assets/images/follow-1.png'
-import plusImg from '../assets/images/plus.png'
-import moreImg from '../assets/images/more.png'
-import more1Img from '../assets/images/more-1.png'
-import danImg from '../assets/images/dan.png'
-import shoucangImg from '../assets/images/shoucang.png'
-import favoriteImg from '../assets/images/favorite.png'
-import playIconImg from '../assets/images/play-icon.png'
+import backImg from '../assets/images/back.svg'
+import back1Img from '../assets/images/back-1.svg'
+import followImg from '../assets/images/follow.svg'
+import follow1Img from '../assets/images/follow-1.svg'
+import plusImg from '../assets/images/plus.svg'
+import moreImg from '../assets/images/more.svg'
+import more1Img from '../assets/images/more-1.svg'
+import favoriteImg from '../assets/images/favorite.svg'
+import playIconImg from '../assets/images/play-icon.svg'
 import diamondImg from '../assets/images/diamond.png'
-import rewindChipImg from '../assets/images/rewind-chip.png'
-import rewindChip1Img from '../assets/images/rewind-chip-1.png'
-import arrowRightImg from '../assets/images/icon-arrow-right.png'
-import crownSilverImg from '../assets/images/crown-silver.png'
-import crownSilver1Img from '../assets/images/crown-silver-1.png'
-import crownSilver2Img from '../assets/images/crown-silver-2.png'
-import minusImg from '../assets/images/minus.png'
-import likeImg from '../assets/images/like.png'
-import like1Img from '../assets/images/like-1.png'
+import rewindChipImg from '../assets/images/rewind-chip.svg'
+import rewindChip1Img from '../assets/images/rewind-chip-1.svg'
+import arrowRightImg from '../assets/images/icon-arrow-right.svg'
+import crownSilverImg from '../assets/images/crown-silver.svg'
+import crownSilver1Img from '../assets/images/crown-silver-1.svg'
+import crownSilver2Img from '../assets/images/crown-silver-2.svg'
+import minusImg from '../assets/images/minus.svg'
+import likeImg from '../assets/images/like.svg'
+import dislikeImg from '../assets/images/dislike.svg'
+import collectedImg from '../assets/images/collected.svg'
+import uncollectedImg from '../assets/images/uncollected.svg'
+import danmuImg from '../assets/images/danmu.svg'
+import rewardTitleBgImg from '../assets/images/reward-title-bg.svg'
 
 const route = useRoute()
 const audioRef = ref<HTMLAudioElement | null>(null)
@@ -263,6 +308,33 @@ const currentTime = ref(0)
 const audioDuration = ref(0)
 const currentCommentTab = ref<'latest' | 'hottest'>('latest')
 const trialProgress = 30
+const topHelpPiaoList = ref<any[]>([])
+const commentList = ref<any[]>([])
+const commentTotalCount = ref<number>(0)
+const showTip = ref(false)
+const contentId = ref<number>(0)
+const contentType = ref<number>(0)
+
+const changeCommentTab = (tab: 'latest' | 'hottest') => {
+  currentCommentTab.value = tab
+  // 重新获取评论数据
+  if (contentId.value > 0) {
+    getCommentList({
+      current: 1,
+      size: 10,
+      pageNo: 1,
+      pageSize: 10,
+      targetType: contentType.value,
+      targetId: contentId.value,
+      orderBy: tab === 'latest' ? 1 : 2 // 1 最新，2 最热
+    }).then(response => {
+      if (response.success && response.data) {
+        commentList.value = response.data.list || []
+        commentTotalCount.value = response.data.page.total || 0
+      }
+    })
+  }
+}
 
 const createMockDetail = (): ListenVO => ({
   id: 1309,
@@ -353,96 +425,85 @@ const displayName = computed(() => detail.value?.user?.nickName || '吃菠菜的
 const avatarSource = computed(() => detail.value?.user?.imagePath || '')
 const coverSource = computed(() => detail.value?.pic || '/image.png')
 const episodeLabel = computed(() => detail.value?.groupOrder || detail.value?.groupId || 21)
-
-const rewardUsers = computed(() => {
-  const current = detail.value
-  const primaryImage = current?.user?.imagePath || ''
-
-  return [
-    { name: '暖暖', image: primaryImage, badge: '1', accent: '#f3c152' },
-    { name: '阿泽', image: '', badge: '2', accent: '#84d8ff' },
-    { name: '听友', image: '', badge: '3', accent: '#ffad66' },
-    { name: '小北', image: '', badge: '4', accent: '#8bd7c5' }
-  ]
-})
+const accent = ['#F6BE53', '#9AC1D9', '#F3882A', 'transparent']
 
 const commentTabs = [
   { key: 'latest', label: '最新' },
   { key: 'hottest', label: '最热' }
 ] as const
 
-const commentTotal = computed(() => detail.value?.commentCount || 8)
-
-const commentList = computed(() => {
-  const primaryAvatar = detail.value?.user?.imagePath || ''
-
-  return [
-    {
-      id: 1,
-      author: '吃菠菜的鱼哥',
-      avatar: primaryAvatar,
-      avatarAccent: '#5dd8ce',
-      time: '49分钟前',
-      content: '通往异世界大门之原始之门的开局第一章有点难懂，难道是我太笨？...',
-      likes: 307,
-      liked: true,
-      replyCount: 1,
-      replyPreview: undefined
-    },
-    {
-      id: 2,
-      author: '我不是白菜',
-      avatar: '/9d81bfda-743b-4116-983b-1512716905fa.png',
-      avatarAccent: '#72b5ff',
-      time: '16:59',
-      content: '运筹帷幄之中，决胜千里之外！~',
-      likes: 178,
-      liked: false,
-      replyCount: 0,
-      replyPreview: {
-        author: '吃菠菜的鱼哥',
-        content: '我叫约瑟天：这句话是什么意思？我没有太明白呢，请你给我解释解释',
-        time: '17:36'
-      }
-    },
-    {
-      id: 3,
-      author: '吃菠菜的鱼哥',
-      avatar: primaryAvatar,
-      avatarAccent: '#5dd8ce',
-      time: '16:40',
-      content: '一整个无语住',
-      likes: 13,
-      liked: false,
-      replyCount: 0,
-      replyPreview: undefined
-    }
-  ]
+// 处理评论数据，添加必要的属性
+const processedCommentList = computed(() => {
+  return commentList.value.map((comment:any) => ({
+    ...comment,
+    showReply: false,
+    avatarAccent: comment.avatarAccent || '#5dd8ce'
+  }))
 })
 
 const displayedComments = computed(() => {
   if (currentCommentTab.value === 'latest') {
-    return commentList.value
+    return processedCommentList.value
   }
 
-  return [...commentList.value].sort((a, b) => b.likes - a.likes)
+  return [...processedCommentList.value].sort((a, b) => b.likes - a.likes)
 })
+
+const getUrlParams = () => {
+  const url = window.location.href
+  const params: Record<string, string> = {}
+  const searchParams = new URLSearchParams(url.split('?')[1] || '')
+  
+  for (const [key, value] of searchParams.entries()) {
+    params[key] = value
+  }
+  
+  return params
+}
 
 const fetchData = async () => {
   loading.value = true
   error.value = ''
 
   try {
-    const id = Number(route.params.id) || 1309
+    // 从URL获取参数
+    const params = getUrlParams()
+    const id = Number(params.id) || Number(route.params.id) || 1309
+    const targetType = Number(params.targetType) || 2
+    
+    contentId.value = id
+    contentType.value = targetType
+    
+    // 获取音频详情
     const response = await getListenDetail(id)
 
     if (response.success && response.data) {
       detail.value = response.data
-      return
+    } else {
+      detail.value = createMockDetail()
+      error.value = response.message || '已展示设计稿预览数据'
+    }
+    
+    // 获取榜单数据
+    const topHelpPiaoResponse = await getListenTopHelpPiao(id, 4)
+    if (topHelpPiaoResponse.success && topHelpPiaoResponse.data) {
+      topHelpPiaoList.value = topHelpPiaoResponse.data
     }
 
-    detail.value = createMockDetail()
-    error.value = response.message || '已展示设计稿预览数据'
+    // 获取评论列表
+    const commentResponse = await getCommentList({
+      current: 1,
+      size: 10,
+      pageNo: 1,
+      pageSize: 10,
+      targetType: targetType,
+      targetId: id,
+      orderBy: currentCommentTab.value === 'latest' ? 1 : 2 // 1 最新，2 最热
+    })
+    if (commentResponse.success && commentResponse.data) {
+      commentList.value = commentResponse.data.list || []
+      commentTotalCount.value = commentResponse.data.page.total || 0
+    }
   } catch (requestError) {
     detail.value = createMockDetail()
     error.value = requestError instanceof Error ? requestError.message : '已展示设计稿预览数据'
@@ -461,6 +522,7 @@ const togglePlay = async () => {
     audioRef.value.currentTime = trialDuration.value
     currentTime.value = trialDuration.value
     isPlaying.value = false
+    showDownloadTip()
     return
   }
 
@@ -488,6 +550,7 @@ const onTimeUpdate = () => {
     currentTime.value = trialDuration.value
     audioRef.value.pause()
     isPlaying.value = false
+    showDownloadTip()
     return
   }
 
@@ -520,6 +583,12 @@ const seek = (event: MouseEvent) => {
 
   audioRef.value.currentTime = nextTime
   currentTime.value = Math.floor(nextTime)
+  
+  if (percent >= maxPercent) {
+    audioRef.value.pause()
+    isPlaying.value = false
+    showDownloadTip()
+  }
 }
 
 const skip = (seconds: number) => {
@@ -531,34 +600,26 @@ const skip = (seconds: number) => {
   const nextTime = Math.min(Math.max(audioRef.value.currentTime + seconds, 0), maxTime)
   audioRef.value.currentTime = nextTime
   currentTime.value = Math.floor(nextTime)
+  
+  // 如果跳转到了30%的位置，弹出提示
+  if (nextTime >= maxTime) {
+    audioRef.value.pause()
+    isPlaying.value = false
+    showDownloadTip()
+  }
 }
 
 const toggleLike = () => {
-  if (!detail.value) {
-    return
-  }
-
-  const liked = detail.value.isGood === 1
-  detail.value.isGood = liked ? 0 : 1
-  detail.value.goodCount += liked ? -1 : 1
+  showDownloadTip();
 }
 
 const toggleFav = () => {
-  if (!detail.value) {
-    return
-  }
+  showDownloadTip();
 
-  const favored = detail.value.isFav === 1
-  detail.value.isFav = favored ? 0 : 1
-  detail.value.favCount += favored ? -1 : 1
 }
 
 const toggleFollow = () => {
-  if (!detail.value) {
-    return
-  }
-
-  detail.value.isFollow = detail.value.isFollow === 1 ? 0 : 1
+  showDownloadTip();
 }
 
 const formatTime = (seconds: number) => {
@@ -577,8 +638,56 @@ const formatCount = (count: number) => {
   return `${count}`
 }
 
+const showDownloadTip = () => {
+  showTip.value = true
+}
+
+const jumpToApp = () => {
+  // 封装跳转到有听故事圈的方法
+  const appUrl = 'youtinggsq://app'
+  const webUrl = 'https://www.youtinggsq.com/download'
+  
+  // 尝试打开APP
+  window.location.href = appUrl
+  
+  // 如果500ms后没有打开APP，跳转到下载页面
+  setTimeout(() => {
+    window.location.href = webUrl
+  }, 500)
+}
+
+const closeTip = () => {
+  showTip.value = false
+  // 重置音频进度并暂停
+  if (audioRef.value) {
+    audioRef.value.pause()
+    audioRef.value.currentTime = 0
+    currentTime.value = 0
+    isPlaying.value = false
+  }
+}
+
+const toggleReply = (commentId: number) => {
+  const comment = commentList.value.find((c:any) => c.id === commentId)
+  if (comment) {
+    comment.showReply = !comment.showReply
+  }
+}
+
+const autoPlayAudio = () => {
+  if (audioRef.value && detail.value?.filePath) {
+    audioRef.value.play().then(() => {
+      isPlaying.value = true
+    }).catch(() => {
+      isPlaying.value = false
+    })
+  }
+}
+
 onMounted(() => {
   fetchData()
+  // 延迟自动播放，确保音频元素已加载
+  setTimeout(autoPlayAudio, 1000)
 })
 </script>
 
@@ -711,7 +820,7 @@ onMounted(() => {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: vw(10px);
+  gap: vw(3px);
   max-width: vw(112px);
 }
 
@@ -782,8 +891,9 @@ onMounted(() => {
 .vip-chip {
   display: inline-flex;
   align-items: center;
-  gap: vw(6px);
-  padding: vw(6px) vw(11px);
+  height: vw(26px);
+  gap: vw(4px);
+  padding: vw(2px) vw(6px);
   border-radius: vw(8px);
   background: rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255);
@@ -794,15 +904,20 @@ onMounted(() => {
 }
 
 .chip-icon {
-  width: vw(14px);
+  width: vw(17px);
   height: vw(14px);
   color: #f6c35d;
+}
+
+.circle-btn .icon-img {
+  width: vw(15px);
+  height: vw(15px);
 }
 
 .follow-btn {
   min-width: vw(45px);
   height: vw(20px);
-  padding: 0 vw(11px);
+  padding: 0 vw(5px);
   border-radius: vw(6px);
   color: #6bedf2;
   border: vw(1px) solid #6bedf2;
@@ -855,6 +970,7 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  align-items: center;
   gap: vw(16px);
 }
 
@@ -863,22 +979,26 @@ onMounted(() => {
   margin: 0;
   font-size: vw(16px);
   line-height: 1.28;
-  letter-spacing: vw(0.2px);
+  letter-spacing: vw(0px);
   font-weight: 700;
+  white-space: nowrap;
+  text-overflow: clip;
+  overflow: hidden;
+  width: vw(187px);
 }
 
 .headline-actions {
   display: flex;
   align-items: center;
-  gap: vw(14px);
+  gap: vw(10px);
 }
 
 .metric-button {
   display: flex;
   align-items: center;
-  gap: vw(4px);
+  gap: vw(1px);
   color: rgba(255, 255, 255, 0.64);
-  font-size: vw(14px);
+  font-size: vw(10px);
 }
 
 .metric-button .icon-svg {
@@ -893,6 +1013,10 @@ onMounted(() => {
 
 .metric-button .active {
   color: #62f0da;
+}
+
+.metric-button span {
+  margin-top: auto;
 }
 
 .bullet-button {
@@ -911,12 +1035,12 @@ onMounted(() => {
 }
 
 .meta-row {
-  margin-top: vw(12px);
+  margin-top: vw(2px);
   display: flex;
   align-items: center;
-  gap: vw(10px);
+  gap: vw(8px);
   color: rgba(255, 255, 255, 0.56);
-  font-size: vw(14px);
+  font-size: vw(12px);
 }
 
 .breadcrumb {
@@ -924,12 +1048,14 @@ onMounted(() => {
 }
 
 .subscribe-tag {
-  padding: vw(2px) vw(10px);
+  padding: vw(4px);
   border: vw(1px) solid #41dad1;
   border-radius: vw(4px);
   color: #6deade;
-  line-height: 1.35;
-  font-size: vw(10px);
+  line-height: vw(9px);
+  font-size: vw(9px);
+  width: vw(35px);
+  text-align: center;
 }
 
 .shortcut-grid {
@@ -980,19 +1106,20 @@ onMounted(() => {
 }
 
 .progress-section {
-  margin-top: vw(8px);
+  margin-top: vw(18px);
 }
 
 .progress-row {
   display: grid;
-  grid-template-columns: vw(28px) 1fr vw(28px);
-  align-items: center;
+  grid-template-columns: vw(20px) 1fr vw(22px);
+  align-items: normal;
   column-gap: vw(12px);
 }
 
 .progress-main {
   position: relative;
   padding-top: 0;
+  top: vw(9px);
 }
 
 .time-row {
@@ -1000,7 +1127,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: vw(13px);
+  font-size: vw(10px);
   color: rgba(255, 255, 255, 0.82);
 }
 
@@ -1018,7 +1145,7 @@ onMounted(() => {
   position: relative;
   display: block;
   width: 100%;
-  height: vw(6px);
+  height: vw(2px);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.38);
 }
@@ -1033,8 +1160,8 @@ onMounted(() => {
 .progress-thumb {
   position: absolute;
   top: 50%;
-  width: vw(12px);
-  height: vw(12px);
+  width: vw(6px);
+  height: vw(6px);
   border-radius: 50%;
   background: #fff;
   transform: translate(-50%, -50%);
@@ -1043,8 +1170,8 @@ onMounted(() => {
 .trial-thumb {
   position: absolute;
   top: 50%;
-  width: vw(4px);
-  height: vw(12px);
+  width: vw(3px);
+  height: vw(6px);
   border-radius: 999px;
   background: #fff;
   transform: translate(-50%, -50%);
@@ -1052,28 +1179,44 @@ onMounted(() => {
 
 .trial-pill-wrap {
   position: absolute;
-  top: vw(18px);
-  transform: translateX(-50%);
+  top: vw(12px);
+  left: vw(30px);
   pointer-events: none;
   z-index: 2;
 }
 
+.trial-pill-wrap::before {
+  content: '';
+  position: absolute;
+  top: vw(-18px);
+  left: vw(47px);
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: #3E4347;
+  border-bottom: vw(10px) solid #3E4347;
+  border-top: vw(10px) solid transparent;
+  border-left: vw(5px) solid transparent;
+  border-right: vw(5px) solid transparent;
+}
+
 .trial-pill {
-  padding: vw(7px) vw(12px);
-  border-radius: vw(12px);
-  background: rgba(53, 68, 86, 0.95);
+  padding: vw(2px) vw(6px);
+  border-radius: vw(8px);
+  background: #3E4347;
   color: #d9dde3;
-  font-size: vw(13px);
-  line-height: 1.2;
+  font-size: vw(10px);
   white-space: nowrap;
+  height: vw(26px);
+  line-height: vw(22px);
 }
 
 .player-controls {
   margin-top: vw(34px);
   display: grid;
-  grid-template-columns: vw(52px) vw(48px) 1fr vw(48px) vw(52px);
   align-items: center;
-  gap: vw(12px);
+  gap: vw(48px);
+  grid-template-columns: vw(22px) vw(20px) 1fr vw(20px) vw(25px);
 }
 
 .wifi-icon {
@@ -1109,18 +1252,19 @@ onMounted(() => {
 }
 
 img.control-btn.side-control {
-  width: vw(28px);
-  height: vw(28px);
+  width: vw(22px);
+  height: vw(22px);
   object-fit: contain;
 }
 
 .side-control {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: vw(6px);
-  font-size: vw(14px);
+  font-size: vw(11px);
   line-height: 1;
+  color: #888888;
 }
 
 .align-right {
@@ -1142,19 +1286,19 @@ img.control-btn.side-control {
 
 img.control-btn.previous-btn,
 img.control-btn.next-btn {
-  width: vw(34px);
-  height: vw(40px);
+  width: vw(17px);
+  height: vw(20px);
   object-fit: contain;
 }
 
 .play-button {
-  width: vw(78px);
-  height: vw(78px);
+  width: vw(56px);
+  height: vw(56px);
   margin: 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: vw(24px);
+  border-radius: vw(16px);
   background: #f4f5f7;
   color: #101114;
   box-shadow: 0 vw(18px) vw(40px) rgba(0, 0, 0, 0.24);
@@ -1167,10 +1311,9 @@ img.control-btn.next-btn {
 
 .reward-board {
   margin-top: vw(34px);
-  padding: vw(18px) vw(16px) vw(20px);
-  border-radius: vw(16px);
-  background: rgba(8, 23, 36, 0.8);
-  box-shadow: inset 0 vw(1px) 0 rgba(255, 255, 255, 0.04);
+  padding: vw(14px) vw(12px);
+  border-radius: vw(8px);
+  background: #11191F;
 }
 
 .reward-header {
@@ -1180,30 +1323,43 @@ img.control-btn.next-btn {
 }
 
 .reward-title {
-  font-size: vw(18px);
+  font-size: vw(16px);
   font-weight: 700;
+  height: vw(20px);
   color: #f1fffc;
-  text-shadow:
-    0 0 0 #000,
-    0 0 vw(10px) rgba(57, 255, 232, 0.35);
+  position: relative;
+}
+
+.reward-title-bg {
+  width: vw(18px);
+  height: vw(18px);
+  object-fit: contain;
+  position: absolute;
+  top: vw(2px);
+  z-index: 0;
+}
+
+.reward-title span {
+  position: relative;
+  z-index: 1;
 }
 
 .more-btn {
   display: inline-flex;
   align-items: center;
   gap: vw(4px);
-  font-size: vw(14px);
-  color: rgba(255, 255, 255, 0.56);
+  font-size: vw(12px);
+  color: #888888;
 }
 
 .more-arrow {
-  width: vw(10px);
-  height: vw(20px);
+  width: vw(5px);
+  height: vw(10px);
   object-fit: contain;
 }
 
 .reward-list {
-  margin-top: vw(14px);
+  margin-top: vw(22px);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: vw(12px);
@@ -1216,18 +1372,16 @@ img.control-btn.next-btn {
 
 .reward-avatar-shell {
   position: relative;
-  width: vw(62px);
-  height: vw(62px);
-  padding: vw(4px);
-  border-radius: vw(18px);
-  background: linear-gradient(180deg, var(--accent) 0%, rgba(255, 255, 255, 0.06) 100%);
+  width: vw(46px);
+  height: vw(46px);
+  border-radius: vw(8px);
+  border: vw(2px) solid var(--accent);
 }
 
 .reward-avatar {
   width: 100%;
   height: 100%;
-  border-radius: vw(14px);
-  object-fit: cover;
+  border-radius: vw(6.4px);
   background: #213040;
 }
 
@@ -1242,10 +1396,10 @@ img.control-btn.next-btn {
 
 .reward-badge {
   position: absolute;
-  top: vw(-12px);
-  left: vw(4px);
-  width: vw(28px);
-  height: vw(24px);
+  top: vw(-14px);
+  left: vw(15px);
+  width: vw(14px);
+  height: vw(12px);
   object-fit: contain;
 }
 
@@ -1288,8 +1442,8 @@ img.control-btn.next-btn {
 }
 
 .comment-title {
-  margin: 0;
-  font-size: vw(17px);
+  margin: 0 auto;
+  font-size: vw(16px);
   font-weight: 700;
   color: rgba(255, 255, 255, 0.96);
 }
@@ -1297,18 +1451,18 @@ img.control-btn.next-btn {
 .comment-tabs {
   display: inline-flex;
   align-items: center;
-  gap: vw(6px);
+  gap: vw(2px);
 }
 
 .comment-tab {
-  min-width: vw(54px);
-  height: vw(34px);
-  padding: 0 vw(12px);
-  border-radius: vw(12px);
+  min-width: vw(41px);
+  height: vw(22px);
+  padding: vw(3px) vw(8px);
+  border-radius: vw(6px);
   border: 0;
   background: transparent;
   color: rgba(255, 255, 255, 0.72);
-  font-size: vw(14px);
+  font-size: vw(12px);
 }
 
 .comment-tab.active {
@@ -1344,9 +1498,9 @@ img.control-btn.next-btn {
 
 .comment-avatar,
 .comment-avatar-fallback {
-  width: vw(42px);
-  height: vw(42px);
-  border-radius: vw(12px);
+  width: vw(32px);
+  height: vw(32px);
+  border-radius: vw(4px);
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -1367,14 +1521,13 @@ img.control-btn.next-btn {
 
 .comment-name {
   color: rgba(255, 255, 255, 0.9);
-  font-size: vw(15px);
-  font-weight: 600;
+  font-size: vw(12px);
 }
 
 .comment-time {
   margin-top: vw(2px);
   color: rgba(255, 255, 255, 0.48);
-  font-size: vw(13px);
+  font-size: vw(10px);
 }
 
 .comment-like {
@@ -1395,14 +1548,14 @@ img.control-btn.next-btn {
 }
 
 .comment-content {
-  margin: vw(12px) vw(50px) 0 vw(52px);
+  margin: vw(12px) vw(5px) 0 vw(42px);
   color: rgba(255, 255, 255, 0.96);
-  font-size: vw(17px);
-  line-height: 1.6;
+  font-size: vw(14px);
+  line-height: vw(22px);
 }
 
 .reply-expand {
-  margin: vw(14px) 0 0 vw(52px);
+  margin: vw(14px) 0 0 vw(42px);
   display: inline-flex;
   align-items: center;
   gap: vw(4px);
@@ -1433,20 +1586,20 @@ img.control-btn.next-btn {
 
 .reply-author {
   color: rgba(255, 255, 255, 0.72);
-  font-size: vw(13px);
+  font-size: vw(10px);
 }
 
 .reply-text {
   margin-top: vw(6px);
   color: rgba(255, 255, 255, 0.92);
-  font-size: vw(15px);
+  font-size: vw(12px);
   line-height: 1.5;
 }
 
 .reply-time {
-  margin-top: vw(8px);
+  margin-top: vw(5px);
   color: rgba(255, 255, 255, 0.45);
-  font-size: vw(12px);
+  font-size: vw(10px);
 }
 
 .comment-composer {
@@ -1455,12 +1608,12 @@ img.control-btn.next-btn {
   bottom: 0;
   z-index: 5;
   width: 100%;
-  padding: vw(10px) vw(22px) vw(18px);
+  padding: vw(18px) vw(22px) vw(18px);
   display: flex;
   align-items: center;
   gap: vw(14px);
   transform: translateX(-50%);
-  background: linear-gradient(180deg, rgba(5, 16, 27, 0) 0%, rgba(5, 16, 27, 0.96) 24%, rgba(5, 16, 27, 0.98) 100%);
+  background: linear-gradient(to bottom, rgba(180, 180, 180, 0.4), rgba(180, 180, 180, 0.6), rgba(180, 180, 180, 0.9));
   backdrop-filter: blur(vw(14px));
 }
 
@@ -1483,7 +1636,7 @@ img.control-btn.next-btn {
   border-radius: 999px;
   background: #67dde3;
   color: #12313d;
-  font-size: vw(20px);
+  font-size: vw(18px);
   font-weight: 700;
   letter-spacing: vw(0.5px);
   box-shadow: 0 vw(12px) vw(24px) rgba(103, 221, 227, 0.2);
@@ -1539,5 +1692,98 @@ img.control-btn.next-btn {
   to {
     transform: rotate(360deg);
   }
+}
+
+.tip-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.tip-content {
+  width: 80%;
+  max-width: 320px;
+  background: linear-gradient(180deg, #4fc3b8 0%, #22516f 100%);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.tip-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.tip-icon {
+  margin-bottom: 24px;
+}
+
+.welcome-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tip-title {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.app-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tip-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  margin-bottom: 32px;
+  line-height: 1.4;
+}
+
+.tip-button {
+  width: 100%;
+  height: 50px;
+  background: white;
+  border: none;
+  border-radius: 25px;
+  color: #22516f;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tip-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 </style>
