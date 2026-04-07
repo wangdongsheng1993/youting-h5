@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -7,9 +8,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://testapi.youtinggsq.com/youtingh5api',
+        target: import.meta.env.VITE_API_BASE_URL || 'http://testapi.youtinggsq.com/youtingh5api',
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }

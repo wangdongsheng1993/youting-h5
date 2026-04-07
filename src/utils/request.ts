@@ -1,11 +1,12 @@
 import axios from 'axios'
 
+const baseURL = import.meta.env.PROD
+  ? import.meta.env.VITE_API_BASE_URL
+  : '/api'
+
 const request = axios.create({
-  baseURL: '/api',
+  baseURL,
   timeout: 10000,
-  // headers: {
-  //   Authorization: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGllbnRUeXBlIjozLCJ1c2VyaWQiOiI0NyIsInBsYXRmb3JtIjozLCJsb2dpbl91c2VyX2tleSI6IjQzYjliY2I5OTc5NTVjYWJjMjYxZGM2ZDM3MDA1YjhiIn0.d_DDvFMKDxs_dmDgBUhN6xfBNepngsNX4kbVEsfdlLw'
-  // }
 })
 
 request.interceptors.response.use(
